@@ -1,0 +1,41 @@
+# tomcat
+server:
+  context-path: /
+  port: 8080
+  tomcat:
+    uri-encoding: UTF-8
+
+# mybatis
+mybatis:
+    configuration:
+        map-underscore-to-camel-case: true
+    
+# druid
+spring:
+  datasource:
+    username: root
+    password: chenbin
+    url: jdbc:mysql://192.168.128.135:3306/bargainsDash?useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+# rabbitmq
+  rabbitmq:
+    host: 192.168.128.135
+    port: 5672
+    virtual-host: /chenbin
+    username: chenbin
+    password: chenbin        
+    
+# redis    
+  redis:
+    host: 192.168.128.135
+
+# thymeleaf 开发阶段禁用缓存   
+  thymeleaf:
+    cache: false
+
+# log
+logging:
+  level:
+    com.practice: debug

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>请输入验证码</title>
+</head>
+<body>
+	<p th:text="${goodsId}" style="display:none;" id="goodsId"></p>
+
+	<!-- 验证码 -->
+	<div id="mpanel1"></div>
+
+	<!--确定的按钮，id名称在初始化时使用-->
+	<button id="check-btn" class="verify-btn">确定</button>
+</body>
+<!--引入CSS-->
+<link rel="stylesheet" type="text/css" href="/asserts/css/verify.css">
+<!--引入JQUERY-->
+<script type="text/javascript"
+	th:src="@{/webjars/jquery/3.3.1-1/jquery.js}"></script>
+<!--引入JS-->
+<script type="text/javascript" src="/asserts/js/verify.min.js"></script>
+<script>//验证码插件https://veui.net/
+	$('#mpanel1').codeVerify({
+
+		//常规验证码type=1， 运算验证码type=2
+		type : 1,
+
+		//验证码宽度
+		width : '400px',
+
+		//验证码高度
+		height : '50px',
+
+		//......更多参数设置请查阅文档
+
+		//提交按钮的id名称
+		btnId : 'check-btn',
+		
+		//验证失败
+		error : function() {
+	    	alert('验证码不匹配！');
+	    },
+		//验证成功以后的回调，发起真正的秒杀请求
+		success : function() {
+			var goodsId = $("#goodsId").text();
+			console.log(goodsId);
+			var url = "/bargainsDash2/"+goodsId;
+
+			$.post(url,{},function(result){
+				if(result.status=="QUEUE"){//排队中，向服务器查询处理结果
+					getBargainDashResult(goodsId);
+				}else{//失败了，直接展示失败
+					window.alert(result.reason);
+				}
+			},'json');
+		}
+	});
+	
+	//向服务器查询处理结果
+	function getBargainDashResult(goodsId){
+		$.get("/bargainsDashResult/"+goodsId,{},function(result){
+			if(result.status=="QUEUE"){//排队中，1s后，向服务器查询处理结果
+				setTimeout(function(){
+					getBargainDashResult(goodsId);
+				}, 1000);
+			}else if(result.status=="SUCCESS"){//成功，展示订单
+				window.alert(JSON.stringify(result.orders));
+			}else{//失败，展示错误信息
+				window.alert(result.reason);
+			}
+		},'json');
+	}
+</script>
+</html>

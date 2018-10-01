@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>登录</title>
+		<!-- Bootstrap core CSS -->
+		<!-- 注意这里的@{}用来写URL的,/代表localhost:8080/,浏览器怎么能访问到,这就怎么写 -->
+		<link href="/asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.1.0/css/bootstrap.min.css}" rel="stylesheet">
+		<!-- Custom styles for this template -->
+		<link href="/asserts/css/signin.css"  rel="stylesheet">
+	</head>
+
+	<body class="text-center">
+		<form class="form-signin" th:action="@{/login}" method="post">
+			<img class="mb-4" src="/asserts/img/bootstrap-solid.svg" alt="" width="72" height="72">
+			<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+			<!-- 展示后端传递过来的错误信息，如果没有错误消息，p标签都不展示，用到了内置工具对象#strings.isEmpty()-->
+			<p style="color:red;" th:text="${errorMsg}" th:if="${not #strings.isEmpty(errorMsg)}"></p>
+			<label class="sr-only">Username</label>
+			<input type="text" name="name" class="form-control" placeholder="username">
+			<label class="sr-only">Password</label>
+			<input type="password" name="password" class="form-control" placeholder="password">
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+			<p class="mt-5 mb-3 text-muted">© 2017-2018</p>
+		</form>
+
+	</body>
+
+</html>
